@@ -8,8 +8,29 @@ import './CommentBox.css';
 class CommentBox extends Component {
   constructor() {
     super();
-    this.state = { data: [] };
+    this.state = {
+      data: [],
+      error : null,
+      author : '',
+      text : ''
+     };
+     this.pollInterval = null;
   }
+
+  componentDidMount(){
+    this.loadCommentsFromServer();
+    if(!this.pollInterval){
+      this.pollInterval = setInterval(this.loadCommentsFromServer, 2000);
+    }
+  }
+
+  componentWillUnMount(){
+    if(this.pollInterval){
+      clearInterval(this.pollInterval);
+      this.pollInterval = null;
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -17,8 +38,11 @@ class CommentBox extends Component {
           <h2>Comments:</h2>
           <CommentList data={DATA} />
         </div>
-        <div className="form">
-          <CommentForm />
+        <div>
+          <div className="form">
+            <CommentForm author = {this.state.author} text={this.state.text}/>
+          </div>
+          {this.state.error && <p>{this.state.error}</p>}
         </div>
       </div>
     );
