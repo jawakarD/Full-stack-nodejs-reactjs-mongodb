@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 //object shows the shape of the database entries;
 const CommentSchema = new Schema({
-  auther : String,
+  author : String,
   text : String,
 },{
   timestamp : true
