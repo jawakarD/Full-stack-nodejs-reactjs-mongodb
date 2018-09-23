@@ -7,9 +7,11 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import Comment from './models/comment'
+const path = require('path');
 
 // creating instances
 const app = express();
+app.use(express.static(path.join(__dirname, 'mern/build')));
 const router  = express.Router();
 
 const API_PORT = process.env.API_PORT || 3001;
@@ -86,7 +88,12 @@ router.delete('/comments/:commentId', (req, res) => {
   });
 });
 
-
 app.use('/api',router);
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/mern/build/index.html'));
+});
 
 app.listen(API_PORT,()=> console.log(`listening on port ${API_PORT}`));
