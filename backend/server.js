@@ -50,6 +50,14 @@ router.post('/comments', (req, res) => {
       error: 'You must provide an author and comment'
     });
   }
+    comment.author = author;
+    comment.text = text;
+    console.log(comment.author, comment.text);
+    comment.save(err => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true });
+    });
+ });
 
 router.put('/comments/:commentId', (req, res) => {
   const { commentId } = req.params;
@@ -79,14 +87,6 @@ router.delete('/comments/:commentId', (req, res) => {
   });
 });
 
-  comment.author = author;
-  comment.text = text;
-  console.log(comment.author, comment.text);
-  comment.save(err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
 
 app.use('/api',router);
 
